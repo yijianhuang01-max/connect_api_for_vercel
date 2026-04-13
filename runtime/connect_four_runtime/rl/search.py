@@ -6,7 +6,6 @@ import time
 from dataclasses import dataclass
 
 import numpy as np
-import torch
 
 from ..core.game import ConnectNGame, GameState, player_view
 
@@ -81,7 +80,7 @@ def _line_weights(win_length: int) -> dict[int, float]:
 
 
 def _network_leaf_score(
-    model: torch.nn.Module | None,
+    model,
     state: GameState,
     game: ConnectNGame,
     device: str,
@@ -91,12 +90,13 @@ def _network_leaf_score(
     legal_mask = game.legal_action_mask(state.board)
     if not np.any(legal_mask):
         return 0.0
-    state_tensor = torch.from_numpy(player_view(state.board, state.current_player)).to(device)
-    with torch.no_grad():
-        q_values = model(state_tensor.unsqueeze(0)).squeeze(0)
-    legal_tensor = torch.as_tensor(legal_mask, dtype=torch.bool, device=q_values.device)
-    masked = q_values.masked_fill(~legal_tensor, torch.finfo(q_values.dtype).min)
-    return float(torch.tanh(masked.max() / 5.0).item())
+    state_batch = np.expand_dims(player_view(state.board, state.current_player), axis=0)
+    if hasattr(model, "predict"):
+        q_values = np.asarray(model.predict(state_batch), dtype=np.float32).reshape(-1)
+    else:
+        q_values = np.asarray(model(state_batch), dtype=np.float32).reshape(-1)
+    masked = np.where(legal_mask, q_values, -np.inf)
+    return float(np.tanh(np.max(masked) / 5.0))
 
 
 def evaluate_state_heuristic(
@@ -104,7 +104,7 @@ def evaluate_state_heuristic(
     game: ConnectNGame,
     perspective_player: int,
     *,
-    model: torch.nn.Module | None = None,
+    model=None,
     device: str = "cpu",
     network_guidance_weight: float = 0.0,
     heuristic_weight: float = 1.0,
@@ -161,7 +161,7 @@ def evaluate_state_heuristic(
 def _ordered_actions(
     state: GameState,
     game: ConnectNGame,
-    model: torch.nn.Module | None,
+    model,
     device: str,
     search_config: SearchConfig,
 ) -> list[int]:
@@ -175,10 +175,11 @@ def _ordered_actions(
 
     q_values_np: np.ndarray | None = None
     if model is not None:
-        state_tensor = torch.from_numpy(player_view(state.board, state.current_player)).to(device)
-        with torch.no_grad():
-            q_values = model(state_tensor.unsqueeze(0)).squeeze(0)
-        q_values_np = q_values.detach().cpu().numpy()
+        state_batch = np.expand_dims(player_view(state.board, state.current_player), axis=0)
+        if hasattr(model, "predict"):
+            q_values_np = np.asarray(model.predict(state_batch), dtype=np.float32).reshape(-1)
+        else:
+            q_values_np = np.asarray(model(state_batch), dtype=np.float32).reshape(-1)
 
     size = game.config.board_size
     center = (size - 1) / 2.0
@@ -208,7 +209,7 @@ def search_action(
     state: GameState,
     game: ConnectNGame,
     *,
-    model: torch.nn.Module | None = None,
+    model=None,
     device: str = "cpu",
     search_config: SearchConfig | None = None,
     depth: int | None = None,
@@ -315,7 +316,7 @@ def epsilon_search_action(
     state: GameState,
     game: ConnectNGame,
     *,
-    model: torch.nn.Module | None = None,
+    model=None,
     device: str = "cpu",
     epsilon: float = 0.0,
     rng: random.Random | None = None,

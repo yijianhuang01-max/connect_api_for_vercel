@@ -4,7 +4,6 @@ import random
 from typing import Callable
 
 import numpy as np
-import torch
 
 from ..core.game import ConnectNGame, GameState, player_view
 from .search import SearchConfig, epsilon_search_action, search_action
@@ -23,28 +22,28 @@ def random_action(legal_mask: np.ndarray, rng: random.Random | None = None) -> i
     return int(rng.choice(legal_indices.tolist()))
 
 
-def masked_argmax(q_values: torch.Tensor, legal_mask: np.ndarray | torch.Tensor) -> int:
-    if not torch.is_tensor(legal_mask):
-        legal_mask = torch.as_tensor(legal_mask, dtype=torch.bool, device=q_values.device)
-    masked = q_values.masked_fill(~legal_mask, torch.finfo(q_values.dtype).min)
-    return int(torch.argmax(masked).item())
+def _predict_q_values(model, state: GameState) -> np.ndarray:
+    state_batch = np.expand_dims(player_view(state.board, state.current_player), axis=0)
+    if hasattr(model, "predict"):
+        output = model.predict(state_batch)
+    else:
+        output = model(state_batch)
+    return np.asarray(output, dtype=np.float32).reshape(-1)
 
 
-def greedy_action(
-    model: torch.nn.Module,
-    state: GameState,
-    game: ConnectNGame,
-    device: str,
-) -> int:
+def masked_argmax(q_values: np.ndarray, legal_mask: np.ndarray) -> int:
+    masked = np.where(legal_mask, q_values, -np.inf)
+    return int(np.argmax(masked))
+
+
+def greedy_action(model, state: GameState, game: ConnectNGame, device: str) -> int:
     legal_mask = game.legal_action_mask(state.board)
-    state_tensor = torch.from_numpy(player_view(state.board, state.current_player)).to(device)
-    with torch.no_grad():
-        q_values = model(state_tensor.unsqueeze(0)).squeeze(0)
+    q_values = _predict_q_values(model, state)
     return masked_argmax(q_values, legal_mask)
 
 
 def epsilon_greedy_action(
-    model: torch.nn.Module,
+    model,
     state: GameState,
     game: ConnectNGame,
     device: str,
@@ -94,7 +93,7 @@ def choose_action(
     state: GameState,
     game: ConnectNGame,
     rng: random.Random | None = None,
-    model: torch.nn.Module | None = None,
+    model=None,
     device: str = "cpu",
     epsilon: float = 0.0,
     search_config: SearchConfig | None = None,

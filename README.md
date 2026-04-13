@@ -22,12 +22,13 @@ python -m uvicorn app:app --reload --host 127.0.0.1 --port 8002
 - `app.py` is the Vercel entrypoint
 - `vercel.json` contains the function configuration
 - `runtime/connect_four_runtime/` packages the minimal inference runtime needed on Vercel
-- `models/` includes a bundled example checkpoint and leaderboard metadata
+- `models/` includes a bundled ONNX model, the original checkpoint metadata file, and leaderboard metadata
 
 ## Notes
 
-- The deployed Vercel bundle is intentionally lightweight and uses the bundled checkpoint in `models/`
-- If you want additional selectable models on Vercel, copy more compatible checkpoints into `models/`
+- The deployed Vercel bundle is intentionally lightweight and uses ONNX Runtime instead of PyTorch for inference
+- The bundled model is `models/connect_4_8_dqn.onnx`
+- If you want additional selectable models on Vercel, export more compatible checkpoints to ONNX and place them in `models/`
 
 ## Environment
 

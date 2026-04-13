@@ -1,20 +1,24 @@
 from __future__ import annotations
 
+import os
 import sys
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 CONNECT_ROOT = PROJECT_ROOT / "connect_four"
-if CONNECT_ROOT.exists() and str(CONNECT_ROOT) not in sys.path:
+FORCE_BUNDLED_RUNTIME = os.getenv("CONNECT_API_USE_BUNDLED_RUNTIME") == "1"
+if CONNECT_ROOT.exists() and not FORCE_BUNDLED_RUNTIME and str(CONNECT_ROOT) not in sys.path:
     sys.path.insert(0, str(CONNECT_ROOT))
 
 try:
+    if FORCE_BUNDLED_RUNTIME:
+        raise ImportError("Bundled runtime forced by environment.")
+    import torch
     import constants  # type: ignore  # noqa: E402
     from agents import ModelAgent, list_model_choices  # type: ignore  # noqa: E402
     from core.config import GameConfig  # type: ignore  # noqa: E402
@@ -28,7 +32,7 @@ except ImportError:
     from runtime.connect_four_runtime.core.config import GameConfig  # type: ignore  # noqa: E402
     from runtime.connect_four_runtime.core.game import ConnectNGame, GameState  # type: ignore  # noqa: E402
     from runtime.connect_four_runtime.rl.checkpoints import read_leaderboard  # type: ignore  # noqa: E402
-    from runtime.connect_four_runtime.rl.network import build_q_network  # type: ignore  # noqa: E402
+    from runtime.connect_four_runtime.rl.onnx_model import ONNXQModel  # type: ignore  # noqa: E402
     from runtime.connect_four_runtime.rl.policies import greedy_action, tactical_action  # type: ignore  # noqa: E402
     from runtime.connect_four_runtime.rl.search import SearchConfig, search_action  # type: ignore  # noqa: E402
 
@@ -144,9 +148,7 @@ def load_agent(checkpoint_path: str | None) -> ModelAgent:
         def __init__(self, path: str | None):
             self.config = GameConfig()
             self.game = ConnectNGame(self.config)
-            self.device = torch.device("cpu")
-            self.model = build_q_network(self.config, architecture=constants.NETWORK_ARCH).to(self.device)
-            self.model.eval()
+            self.device = "cpu"
             self.search_config = SearchConfig(
                 enabled=constants.SEARCH_ENABLED,
                 max_depth=constants.SEARCH_MAX_DEPTH,
@@ -157,10 +159,9 @@ def load_agent(checkpoint_path: str | None) -> ModelAgent:
                 heuristic_weight=constants.SEARCH_HEURISTIC_WEIGHT,
             )
             self.checkpoint_path = Path(path) if path else None
-            self.available = self.checkpoint_path is not None and self.checkpoint_path.exists()
-            if self.available:
-                payload = torch.load(self.checkpoint_path, map_location=self.device)
-                self.model.load_state_dict(payload["model_state_dict"])
+            self.onnx_path = self.checkpoint_path.with_suffix(".onnx") if self.checkpoint_path else None
+            self.available = self.onnx_path is not None and self.onnx_path.exists()
+            self.model = ONNXQModel(self.onnx_path) if self.available else None
 
     return BundledModelAgent(checkpoint_path)
 
