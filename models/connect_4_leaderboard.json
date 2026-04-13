@@ -1,0 +1,329 @@
+[
+  {
+    "ordinal": 1,
+    "filename": "connect_4_1_dqn.pt",
+    "score": 1000.0,
+    "stage": "offline",
+    "stage_step": 50,
+    "parent_ordinal": null,
+    "opponents": [],
+    "match_games": 0,
+    "wins": 0,
+    "draws": 0,
+    "losses": 0
+  },
+  {
+    "ordinal": 2,
+    "filename": "connect_4_2_dqn.pt",
+    "score": 1000.0,
+    "stage": "offline",
+    "stage_step": 100,
+    "parent_ordinal": 1,
+    "opponents": [
+      {
+        "ordinal": 1,
+        "filename": "connect_4_1_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      }
+    ],
+    "match_games": 10,
+    "wins": 5,
+    "draws": 0,
+    "losses": 5
+  },
+  {
+    "ordinal": 3,
+    "filename": "connect_4_3_dqn.pt",
+    "score": 1000.0,
+    "stage": "offline",
+    "stage_step": 150,
+    "parent_ordinal": 2,
+    "opponents": [
+      {
+        "ordinal": 2,
+        "filename": "connect_4_2_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      },
+      {
+        "ordinal": 1,
+        "filename": "connect_4_1_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      }
+    ],
+    "match_games": 20,
+    "wins": 10,
+    "draws": 0,
+    "losses": 10
+  },
+  {
+    "ordinal": 4,
+    "filename": "connect_4_4_dqn.pt",
+    "score": 1000.0,
+    "stage": "offline",
+    "stage_step": 200,
+    "parent_ordinal": 3,
+    "opponents": [
+      {
+        "ordinal": 3,
+        "filename": "connect_4_3_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      },
+      {
+        "ordinal": 2,
+        "filename": "connect_4_2_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      },
+      {
+        "ordinal": 1,
+        "filename": "connect_4_1_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      }
+    ],
+    "match_games": 30,
+    "wins": 15,
+    "draws": 0,
+    "losses": 15
+  },
+  {
+    "ordinal": 5,
+    "filename": "connect_4_5_dqn.pt",
+    "score": 1000.0,
+    "stage": "online",
+    "stage_step": 500,
+    "parent_ordinal": 4,
+    "opponents": [
+      {
+        "ordinal": 4,
+        "filename": "connect_4_4_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      },
+      {
+        "ordinal": 3,
+        "filename": "connect_4_3_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      },
+      {
+        "ordinal": 2,
+        "filename": "connect_4_2_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1000.0
+      }
+    ],
+    "match_games": 30,
+    "wins": 15,
+    "draws": 0,
+    "losses": 15
+  },
+  {
+    "ordinal": 6,
+    "filename": "connect_4_6_dqn.pt",
+    "score": 1029.8278,
+    "stage": "online",
+    "stage_step": 1000,
+    "parent_ordinal": 5,
+    "opponents": [
+      {
+        "ordinal": 5,
+        "filename": "connect_4_5_dqn.pt",
+        "score": 1000.0,
+        "wins": 10,
+        "draws": 0,
+        "losses": 0,
+        "actual_score": 1.0,
+        "expected_score": 0.5,
+        "candidate_score_before": 1000.0,
+        "candidate_score_after": 1016.0
+      },
+      {
+        "ordinal": 4,
+        "filename": "connect_4_4_dqn.pt",
+        "score": 1000.0,
+        "wins": 10,
+        "draws": 0,
+        "losses": 0,
+        "actual_score": 1.0,
+        "expected_score": 0.523,
+        "candidate_score_before": 1016.0,
+        "candidate_score_after": 1031.2637
+      },
+      {
+        "ordinal": 3,
+        "filename": "connect_4_3_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5449,
+        "candidate_score_before": 1031.2637,
+        "candidate_score_after": 1029.8278
+      }
+    ],
+    "match_games": 30,
+    "wins": 25,
+    "draws": 0,
+    "losses": 5
+  },
+  {
+    "ordinal": 7,
+    "filename": "connect_4_7_dqn.pt",
+    "score": 1042.4213,
+    "stage": "online",
+    "stage_step": 1500,
+    "parent_ordinal": 6,
+    "opponents": [
+      {
+        "ordinal": 6,
+        "filename": "connect_4_6_dqn.pt",
+        "score": 1029.8278,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1029.8278,
+        "candidate_score_after": 1029.8278
+      },
+      {
+        "ordinal": 5,
+        "filename": "connect_4_5_dqn.pt",
+        "score": 1000.0,
+        "wins": 10,
+        "draws": 0,
+        "losses": 0,
+        "actual_score": 1.0,
+        "expected_score": 0.5428,
+        "candidate_score_before": 1029.8278,
+        "candidate_score_after": 1044.4575
+      },
+      {
+        "ordinal": 4,
+        "filename": "connect_4_4_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5636,
+        "candidate_score_before": 1044.4575,
+        "candidate_score_after": 1042.4213
+      }
+    ],
+    "match_games": 30,
+    "wins": 20,
+    "draws": 0,
+    "losses": 10
+  },
+  {
+    "ordinal": 8,
+    "filename": "connect_4_8_dqn.pt",
+    "score": 1039.924,
+    "stage": "online",
+    "stage_step": 2000,
+    "parent_ordinal": 7,
+    "opponents": [
+      {
+        "ordinal": 7,
+        "filename": "connect_4_7_dqn.pt",
+        "score": 1042.4213,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5,
+        "candidate_score_before": 1042.4213,
+        "candidate_score_after": 1042.4213
+      },
+      {
+        "ordinal": 6,
+        "filename": "connect_4_6_dqn.pt",
+        "score": 1029.8278,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5181,
+        "candidate_score_before": 1042.4213,
+        "candidate_score_after": 1041.8416
+      },
+      {
+        "ordinal": 5,
+        "filename": "connect_4_5_dqn.pt",
+        "score": 1000.0,
+        "wins": 5,
+        "draws": 0,
+        "losses": 5,
+        "actual_score": 0.5,
+        "expected_score": 0.5599,
+        "candidate_score_before": 1041.8416,
+        "candidate_score_after": 1039.924
+      }
+    ],
+    "match_games": 30,
+    "wins": 15,
+    "draws": 0,
+    "losses": 15
+  }
+]
