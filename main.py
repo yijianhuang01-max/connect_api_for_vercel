@@ -1,33 +1,27 @@
 from __future__ import annotations
 
 import os
+import sys
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-try:
-    from .adapter import (
-        action_to_response,
-        apply_action,
-        available_models,
-        board_size,
-        empty_board,
-        parse_player,
-        select_move,
-        validate_board_payload,
-    )
-except ImportError:
-    from adapter import (
-        action_to_response,
-        apply_action,
-        available_models,
-        board_size,
-        empty_board,
-        parse_player,
-        select_move,
-        validate_board_payload,
-    )
+ROOT = Path(__file__).resolve().parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from adapter import (
+    action_to_response,
+    apply_action,
+    available_models,
+    board_size,
+    empty_board,
+    parse_player,
+    select_move,
+    validate_board_payload,
+)
 
 
 def _allowed_origins() -> list[str]:
