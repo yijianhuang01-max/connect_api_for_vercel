@@ -5,5 +5,15 @@
       "maxDuration": 60,
       "excludeFiles": "{tests/**,__pycache__/**,**/*.pyc}"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.py"
+    }
+  ]
 }
