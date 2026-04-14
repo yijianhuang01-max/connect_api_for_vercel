@@ -9,7 +9,12 @@ from typing import Any
 import numpy as np
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+SERVICE_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = SERVICE_ROOT
+for candidate in [SERVICE_ROOT, *SERVICE_ROOT.parents]:
+    if (candidate / "connect_four").exists():
+        PROJECT_ROOT = candidate
+        break
 CONNECT_ROOT = PROJECT_ROOT / "connect_four"
 FORCE_BUNDLED_RUNTIME = os.getenv("CONNECT_API_USE_BUNDLED_RUNTIME") == "1"
 if CONNECT_ROOT.exists() and not FORCE_BUNDLED_RUNTIME and str(CONNECT_ROOT) not in sys.path:
