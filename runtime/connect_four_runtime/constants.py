@@ -1,6 +1,9 @@
 from pathlib import Path
 
-import torch
+try:
+    import torch
+except Exception:  # pragma: no cover - optional dependency in lightweight deploys
+    torch = None
 
 SERVICE_ROOT = Path(__file__).resolve().parents[2]
 
@@ -32,7 +35,7 @@ DATASET_DIR = ROOT_DIR / "datasets"
 MODEL_DIR = ROOT_DIR / "models"
 
 # Training defaults.
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = "cuda" if torch is not None and torch.cuda.is_available() else "cpu"
 NETWORK_ARCH = "conv"
 SEARCH_ENABLED = True
 SEARCH_MAX_DEPTH = 3
